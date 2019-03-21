@@ -7,9 +7,10 @@ from bmp180 import BMP180
 from machine import I2C, Pin                        # create an I2C bus object accordingly to the port you are using
 
 # ssid = 'ECCI-PROTOTIPADO'
-# ssid = 'Familialexuil97'
-ssid = 'LEX'
-password = '123qweasd'
+ssid = 'Familialexuil97'
+# ssid = 'LEX'
+# password = '123qweasd'
+password = '3202601178'
 mqtt_server = 'demo.thingsboard.io'
 
 station = network.WLAN(network.STA_IF)

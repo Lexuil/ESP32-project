@@ -155,7 +155,9 @@ class MQTTClient:
         self.sock.write(qos.to_bytes(1, "little"))
         while 1:
             op = self.wait_msg()
-            if op == 0x90:
+            # print(op)
+            # print(type(op))
+            if op == 0x92: # 0x90 default  ---  0x92 thingboard
                 resp = self.sock.read(4)
                 #print(resp)
                 assert resp[1] == pkt[2] and resp[2] == pkt[3]
