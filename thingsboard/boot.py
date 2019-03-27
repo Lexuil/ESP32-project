@@ -1,17 +1,21 @@
 import time
 import json
+import socket
+import struct
 
 from umqttsimple import MQTTClient
 import network
 
 from bmp180 import BMP180
-from machine import I2C, Pin, PWM
+from machine import I2C, Pin, PWM, RTC
 
 # ssid = 'ECCI-PROTOTIPADO'
-ssid = 'Familialexuil97'
-# ssid = 'LEX'
-# password = '123qweasd'
-password = '3202601178'
+# ssid = 'Familialexuil97'
+ssid = 'LEX'
+# ssid = 'wififer'
+password = '123qweasd'
+# password = 'grupo001'
+# password = '3202601178'
 mqtt_server = 'demo.thingsboard.io'
 device_id = "1d653e20-49ea-11e9-8b16-1536657dea99"
 user = "gPhXhT8DWV86TlrlrZDa"
@@ -53,3 +57,13 @@ bus =  I2C(scl=Pin(22), sda=Pin(21), freq=100000)   # on esp8266
 bmp180 = BMP180(bus)
 bmp180.oversample_sett = 2
 bmp180.baseline = 101325
+
+#RTC
+NTP_DELTA = 3155691600  #(Colombia)
+host = "south-america.pool.ntp.org"
+
+rtc = RTC()
+
+#Enable times
+pwm_en_time = [[(3,0,0),(12,30,0)],[(14,0,0),(2,18,0)]]
+sensor_en_time = [[(17,14,0),(17,16,0)],[(17,18,0),(17,19,0)]]
