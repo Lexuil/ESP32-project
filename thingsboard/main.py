@@ -61,36 +61,143 @@ def sub_cb(topic, msg):
     topic = topic.replace('request','response')
     msg_r = json.loads(msg.decode("utf-8"))
 
-    if msg_r['method'] == 'setGpioStatus':
-        print("Sending...")
-        client.publish(topic=topic, msg='{"5": %s}'%(setgpio(msg_r['params'])))
-        client.publish(topic="v1/devices/me/attributes", msg='{"5": %s}'%(setgpio(msg_r['params'])))
-        print("Sent")
-    elif msg_r['method'] == 'getGpioStatus':
-        print("Sending...")
-        client.publish(topic=topic, msg='{"5": %s}'%(getgpio()))
-        client.publish(topic="v1/devices/me/attributes", msg='{"5": %s}'%(getgpio()))
-        print("Sent")
-    elif msg_r['method'][0:7] == 'setDuty':
-        print("Sending...")
-        client.publish(topic=topic, msg='{"params": %s}'%(set_duty_servo(msg_r,msg_r['method'][7])))
-        print("Sent")
-    elif msg_r['method'] == 'setFreq':
-        print("Sending...")
-        client.publish(topic=topic, msg='{"params": %s}'%(set_freq_servo(msg_r)))
-        print("Sent")
-    elif msg_r['method'][0:7] == 'getDuty':
-        print("Sending...")
-        client.publish(topic=topic, msg='{"value": %s}'%(get_duty_servo(msg_r['method'][7])))
-        print("Sent")
-    elif msg_r['method'] == 'getFreq':
-        print("Sending...")
-        client.publish(topic=topic, msg='{"value": %s}'%(get_freq_servo()))
-        print("Sent")
+    if 'method' in msg_r:
+        if msg_r['method'] == 'setGpioStatus':
+            print("Sending...")
+            client.publish(topic=topic, msg='{"5": %s}'%(setgpio(msg_r['params'])))
+            client.publish(topic="v1/devices/me/attributes", msg='{"5": %s}'%(setgpio(msg_r['params'])))
+            print("Sent")
+        elif msg_r['method'] == 'getGpioStatus':
+            print("Sending...")
+            client.publish(topic=topic, msg='{"5": %s}'%(getgpio()))
+            client.publish(topic="v1/devices/me/attributes", msg='{"5": %s}'%(getgpio()))
+            print("Sent")
+        elif msg_r['method'][0:7] == 'setDuty':
+            print("Sending...")
+            client.publish(topic=topic, msg='{"params": %s}'%(set_duty_servo(msg_r,msg_r['method'][7])))
+            print("Sent")
+        elif msg_r['method'] == 'setFreq':
+            print("Sending...")
+            client.publish(topic=topic, msg='{"params": %s}'%(set_freq_servo(msg_r)))
+            print("Sent")
+        elif msg_r['method'][0:7] == 'getDuty':
+            print("Sending...")
+            client.publish(topic=topic, msg='{"value": %s}'%(get_duty_servo(msg_r['method'][7])))
+            print("Sent")
+        elif msg_r['method'] == 'getFreq':
+            print("Sending...")
+            client.publish(topic=topic, msg='{"value": %s}'%(get_freq_servo()))
+            print("Sent")
+    elif 'PWMt1' in msg_r:
+        print(msg_r['PWMt1'])
+        num = msg_r['PWMt1']
+        num = num.split(',')
+
+        if len(num) < len(pwm_en_time):
+            for x in range(len(pwm_en_time)):
+                pwm_en_time[x] = [(),()]
+        elif len(num) > len(pwm_en_time):
+            for x in range(len(num)-len(pwm_en_time)):
+                pwm_en_time.append([(),()])
+
+        i = 0
+
+        for x in num:
+            num1 = x.split('-')
+            if len(num1) == 2:
+                num11 = num1[0].split(':')
+                num12 = num1[1].split(':')
+                pwm_en_time[i] = [(int(num11[0]),int(num11[1])),(int(num12[0]),int(num12[1]))]
+                i = i + 1
+            else:
+                break
+        
+        print(pwm_en_time)
+
+        client.publish(topic="v1/devices/me/attributes", msg=msg)
+    elif 'SENt1' in msg_r:
+        print(msg_r['SENt1'])
+        num = msg_r['SENt1']
+        num = num.split(',')
+
+        if len(num) < len(sensor_en_time):
+            for x in range(len(sensor_en_time)):
+                sensor_en_time[x] = [(),()]
+        elif len(num) > len(sensor_en_time):
+            for x in range(len(num)-len(sensor_en_time)):
+                sensor_en_time.append([(),()])
+
+        i = 0
+
+        for x in num:
+            num1 = x.split('-')
+            if len(num1) == 2:
+                num11 = num1[0].split(':')
+                num12 = num1[1].split(':')
+                sensor_en_time[i] = [(int(num11[0]),int(num11[1])),(int(num12[0]),int(num12[1]))]
+                i = i + 1
+            else:
+                break
+        
+        print(sensor_en_time)
+
+        client.publish(topic="v1/devices/me/attributes", msg=msg)
+    elif 'shared' in msg_r:
+        print(msg_r['shared']['PWMt1'])
+        num = msg_r['shared']['PWMt1']
+        num = num.split(',')
+
+        if len(num) < len(pwm_en_time):
+            for x in range(len(pwm_en_time)):
+                pwm_en_time[x] = [(),()]
+        elif len(num) > len(pwm_en_time):
+            for x in range(len(num)-len(pwm_en_time)):
+                pwm_en_time.append([(),()])
+
+        i = 0
+
+        for x in num:
+            num1 = x.split('-')
+            if len(num1) == 2:
+                num11 = num1[0].split(':')
+                num12 = num1[1].split(':')
+                pwm_en_time[i] = [(int(num11[0]),int(num11[1])),(int(num12[0]),int(num12[1]))]
+                i = i + 1
+            else:
+                break
+        
+        print(pwm_en_time)
+
+        client.publish(topic="v1/devices/me/attributes", msg=msg)
+        
+        print(msg_r['shared']['SENt1'])
+        num = msg_r['shared']['SENt1']
+        num = num.split(',')
+
+        if len(num) < len(sensor_en_time):
+            for x in range(len(sensor_en_time)):
+                sensor_en_time[x] = [(),()]
+        elif len(num) > len(sensor_en_time):
+            for x in range(len(num)-len(sensor_en_time)):
+                sensor_en_time.append([(),()])
+
+        i = 0
+
+        for x in num:
+            num1 = x.split('-')
+            if len(num1) == 2:
+                num11 = num1[0].split(':')
+                num12 = num1[1].split(':')
+                sensor_en_time[i] = [(int(num11[0]),int(num11[1])),(int(num12[0]),int(num12[1]))]
+                i = i + 1
+            else:
+                break
+        
+        print(sensor_en_time)
 
 def compare_rtc(val):
     for x in val:
-        if x[0] < rtc.datetime()[4:7] < x[1]:
+        if x[0] < rtc.datetime()[4:6] < x[1]:
             return 1
     return 0
 
@@ -111,8 +218,23 @@ client = MQTTClient(device_id, mqtt_server, user=user, password='', port=port)
 client.set_callback(sub_cb)
 client.connect()
 print('Conected')
+
+#To obtain times
+client.subscribe("v1/devices/me/attributes/response/+")
+print("Subscribed to topic attributes response")
+
+client.publish(topic="v1/devices/me/attributes/request/45", msg='{"sharedKeys":"PWMt1,SENt1"}')
+client.wait_msg()
+client.disconnect()
+time.sleep(1)
+client.connect()
+print("Connect again")
+
 client.subscribe("v1/devices/me/rpc/request/+")
-print("Subscribed to topic")
+print("Subscribed to topic rcp")
+client.subscribe("v1/devices/me/attributes")
+print("Subscribed to topic attributes")
+
 
 while True:
 
@@ -127,7 +249,7 @@ while True:
     p = bmp180.pressure
     altitude = bmp180.altitude
     
-    #print('{"Temperature":%s, "Pressure":%s, "Altitude":%s, Frequency:%s, "Duty0":%s, "Duty1":%s, "Duty2":%s, "Duty3":%s, "Duty4":%s, "Duty5":%s, "Duty6":%s, "Duty7":%s}'%(temp, p, altitude, servo0.freq(),servo0.duty(),servo1.duty(),servo2.duty(),servo3.duty(),servo4.duty(),servo5.duty(),servo6.duty(),servo7.duty()))
+    # print('{"Temperature":%s, "Pressure":%s, "Altitude":%s, Frequency:%s, "Duty0":%s, "Duty1":%s, "Duty2":%s, "Duty3":%s, "Duty4":%s, "Duty5":%s, "Duty6":%s, "Duty7":%s}'%(temp, p, altitude, servo0.freq(),servo0.duty(),servo1.duty(),servo2.duty(),servo3.duty(),servo4.duty(),servo5.duty(),servo6.duty(),servo7.duty()))
     # print(pwm_status())
 
     client.check_msg()
@@ -138,6 +260,7 @@ while True:
         print("Sensors On", end = "")
         client.publish(topic="v1/devices/me/telemetry", msg='{"Temperature":%s, "Pressure":%s, "Altitude":%s}'%(temp, p, altitude))
     if compare_rtc(pwm_en_time):
-        print("PWM On")
+        print("PWM On", end = "")
         client.publish(topic="v1/devices/me/telemetry", msg='{"Frequency":%s, "Duty0":%s, "Duty1":%s, "Duty2":%s, "Duty3":%s, "Duty4":%s, "Duty5":%s, "Duty6":%s, "Duty7":%s}'%(servo0.freq(),servo0.duty(),servo1.duty(),servo2.duty(),servo3.duty(),servo4.duty(),servo5.duty(),servo6.duty(),servo7.duty()))
+    print("")
     time.sleep(0.1)

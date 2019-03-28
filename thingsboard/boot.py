@@ -10,15 +10,15 @@ from bmp180 import BMP180
 from machine import I2C, Pin, PWM, RTC
 
 # ssid = 'ECCI-PROTOTIPADO'
-# ssid = 'Familialexuil97'
-ssid = 'LEX'
+ssid = 'Familialexuil97'
+# ssid = 'LEX'
 # ssid = 'wififer'
-password = '123qweasd'
+# password = '123qweasd'
 # password = 'grupo001'
-# password = '3202601178'
-mqtt_server = 'demo.thingsboard.io'
-device_id = "1d653e20-49ea-11e9-8b16-1536657dea99"
-user = "gPhXhT8DWV86TlrlrZDa"
+password = '3202601178'
+mqtt_server = 'lexuil.hopto.org'
+device_id = "85db6540-5112-11e9-965e-0d240bde71da"
+user = "ooPmigFBMQrdy42Xf9gz"
 port=1883
 
 station = network.WLAN(network.STA_IF)
@@ -65,5 +65,5 @@ host = "south-america.pool.ntp.org"
 rtc = RTC()
 
 #Enable times
-pwm_en_time = [[(3,0,0),(12,30,0)],[(14,0,0),(2,18,0)]]
-sensor_en_time = [[(17,14,0),(17,16,0)],[(17,18,0),(17,19,0)]]
+pwm_en_time = [[(0,1),(13,59)],[(14,0),(23,59)]]
+sensor_en_time = [[(0,1),(13,59)],[(14,0),(23,59)]]
