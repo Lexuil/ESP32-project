@@ -223,12 +223,12 @@ print('Conected')
 client.subscribe("v1/devices/me/attributes/response/+")
 print("Subscribed to topic attributes response")
 
-client.publish(topic="v1/devices/me/attributes/request/45", msg='{"sharedKeys":"PWMt1,SENt1"}')
-client.wait_msg()
-client.disconnect()
-time.sleep(1)
-client.connect()
-print("Connect again")
+# client.publish(topic="v1/devices/me/attributes/request/45", msg='{"sharedKeys":"PWMt1,SENt1"}')
+# client.wait_msg()
+# client.disconnect()
+# time.sleep(1)
+# client.connect()
+# print("Connect again")
 
 client.subscribe("v1/devices/me/rpc/request/+")
 print("Subscribed to topic rcp")
@@ -245,9 +245,9 @@ while True:
         for x in servo:
             x.deinit()
 
-    temp = bmp180.temperature
-    p = bmp180.pressure
-    altitude = bmp180.altitude
+    d.measure()
+    temperature = d.temperature() # eg. 23.6 (°C)
+    humidity = d.humidity()    # eg. 41.3 (% RH)
     
     # print('{"Temperature":%s, "Pressure":%s, "Altitude":%s, Frequency:%s, "Duty0":%s, "Duty1":%s, "Duty2":%s, "Duty3":%s, "Duty4":%s, "Duty5":%s, "Duty6":%s, "Duty7":%s}'%(temp, p, altitude, servo0.freq(),servo0.duty(),servo1.duty(),servo2.duty(),servo3.duty(),servo4.duty(),servo5.duty(),servo6.duty(),servo7.duty()))
     # print(pwm_status())
@@ -258,11 +258,9 @@ while True:
 
     if compare_rtc(sensor_en_time):
         print("Sensors On", end = "")
-        client.publish(topic="v1/devices/me/telemetry", msg='{"Temperature":%s, "Pressure":%s, "Altitude":%s}'%(temp, p, altitude))
+        client.publish(topic="v1/devices/me/telemetry", msg='{"Temperature":%s, "Humidity":%s}'%(temperature, humidity))
     if compare_rtc(pwm_en_time):
         print("PWM On", end = "")
         client.publish(topic="v1/devices/me/telemetry", msg='{"Frequency":%s, "Duty0":%s, "Duty1":%s, "Duty2":%s, "Duty3":%s, "Duty4":%s, "Duty5":%s, "Duty6":%s, "Duty7":%s}'%(servo0.freq(),servo0.duty(),servo1.duty(),servo2.duty(),servo3.duty(),servo4.duty(),servo5.duty(),servo6.duty(),servo7.duty()))
     print("")
-
-    client.publish(topic="v1/devices/me/telemetry", msg='{"I am":"alive"}')
     time.sleep(0.1)
