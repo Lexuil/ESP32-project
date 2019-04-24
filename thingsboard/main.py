@@ -264,5 +264,7 @@ while True:
         client.publish(topic="v1/devices/me/telemetry", msg='{"Frequency":%s, "Duty0":%s, "Duty1":%s, "Duty2":%s, "Duty3":%s, "Duty4":%s, "Duty5":%s, "Duty6":%s, "Duty7":%s}'%(servo0.freq(),servo0.duty(),servo1.duty(),servo2.duty(),servo3.duty(),servo4.duty(),servo5.duty(),servo6.duty(),servo7.duty()))
     print("")
 
-    client.publish(topic="v1/devices/me/telemetry", msg='{"I am":"alive"}')
-    time.sleep(0.1)
+    hora = str(rtc.datetime()[4]) + "-" + str(rtc.datetime()[5]) + "-" + str(rtc.datetime()[6])
+
+    client.publish(topic="v1/devices/me/telemetry", msg='{"Device time":%s}'%(hora))
+    time.sleep(0.5)
